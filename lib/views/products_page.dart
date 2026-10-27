@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:task_three/widgets/product_widgets.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
@@ -135,26 +136,30 @@ class _ProductsPageState extends State<ProductsPage> {
                 ],
               ),
             ),
+            
             Expanded(
-              child: isSmallScreen
-                  ? ListView.builder(
-                      itemCount: products.length,
-                      itemBuilder: (context, index) {
-                        return buildProduct(index);
-                      },
-                    )
-                  : GridView.builder(
-                      padding: const EdgeInsets.all(12),
-                      itemCount: products.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 3,
-                          ),
-                      itemBuilder: (context, index) {
-                        return buildProduct(index);
-                      },
-                    ),
+             child: screenWidth < 600 ? ProductsListView(
+              products: products,
+              onFavoritePressed: () {
+               setState(() {
+                favorites++;
+               });
+              },
+              onProductTap: (index) {
+               openDetails(products[index]);
+              },
+             )
+             : ProductsGridView(
+               products: products,
+               onFavoritePressed: () {
+                setState(() {
+                 favorites++;
+                });
+               },
+               onProductTap: (index) {
+                openDetails(products[index]);
+               },
+              ),
             ),
           ],
         ),

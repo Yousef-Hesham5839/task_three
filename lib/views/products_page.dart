@@ -3,7 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:task_three/widgets/product_widgets.dart';
 
 class ProductsPage extends StatefulWidget {
-  const ProductsPage({super.key});
+  final String username;
+  const ProductsPage({super.key, required this.username});
 
   @override
   State<StatefulWidget> createState() => _ProductsPageState();
@@ -56,20 +57,24 @@ class _ProductsPageState extends State<ProductsPage> {
     print('ProductsPage: dispose');
   }
 
-  Future<void> openDetails(Map<String, dynamic> product) async {
-    final name = Uri.encodeComponent(product['name'] as String);
-    final price = product['price'].toString();
+  
+ Future<void> openDetails(Map<String, dynamic> product) async {
+   final name = Uri.encodeComponent(product['name'] as String);
+   final price = product['price'].toString();
+ 
+   final result = await context.push<String>(
+     '/product_details/$name/$price',
+   );
+ 
+   if (!mounted) return;
+ 
+   if (result != null) {
+     setState(() {
+       cartMessage = result;
+     });
+   }
+ }
 
-    final result = await context.push<String>('/details/$name/$price');
-
-    if (!mounted) return;
-
-    if (result != null) {
-      setState(() {
-        cartMessage = result;
-      });
-    }
-  }
 
     /*
     OLD NAVIGATOR CODE:
@@ -95,14 +100,10 @@ class _ProductsPageState extends State<ProductsPage> {
 
     @override
     Widget build(BuildContext context) {
-      final username = ModalRoute.of(context)!.settings.arguments as String;
-      final isSmallScreen = screenWidth < 600;
-
-
       return Scaffold(
         appBar: AppBar(
           title: Text(
-            "Products - Welcome <$username>",
+            "Products - Welcome <${widget.username}>",
             style: TextStyle(fontSize: 22),
           ),
           centerTitle: true,

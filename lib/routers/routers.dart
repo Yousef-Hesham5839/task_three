@@ -12,13 +12,17 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const LoginPage(),
     ),
 
+    
     GoRoute(
       path: '/products',
       name: 'products',
       builder: (context, state) {
-        return ProductsPage();
+       final username = state.uri.queryParameters['user'] ?? 'Guest';
+
+       return ProductsPage(username: username);
       },
     ),
+
 
     GoRoute(
       path: '/product_details/:name/:price',

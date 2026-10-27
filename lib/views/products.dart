@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_three/views/product_details_page.dart';
+import 'package:go_router/go_router.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
@@ -56,6 +57,23 @@ class _ProductsPageState extends State<ProductsPage> {
   }
 
   Future<void> openDetails(Map<String, dynamic> product) async {
+    final name = Uri.encodeComponent(product['name'] as String);
+    final price = product['price'].toString();
+
+    final result = await context.push<String>('/details/$name/$price');
+
+    if (!mounted) return;
+
+    if (result != null) {
+      setState(() {
+        cartMessage = result;
+      });
+    }
+  }
+
+    /*
+    OLD NAVIGATOR CODE:
+
     final result = await Navigator.push<String>(
       context,
       MaterialPageRoute(
@@ -73,57 +91,104 @@ class _ProductsPageState extends State<ProductsPage> {
         cartMessage = result;
       });
     }
-  }
+    */
+
+    @override
+    Widget build(BuildContext context) {
+      final username = ModalRoute.of(context)!.settings.arguments as String;
+      final isSmallScreen = screenWidth < 600;
 
 
-  @override
-  Widget build(BuildContext context) {
-    final username = ModalRoute.of(context)!.settings.arguments as String;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Products - Welcome <$username>",
-          style: TextStyle(fontSize: 22),
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "Products - Welcome <$username>",
+            style: TextStyle(fontSize: 22),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
         ),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              cartMessage.isEmpty
-                  ? 'Your cart is empty'
-                  : cartMessage,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.green,
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Text(
+                    'Favorites: $favorites',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text('Screen width: ${screenWidth.toStringAsFixed(1)}'),
+                  const SizedBox(height: 8),
+                  Text(
+                    cartMessage.isEmpty ? 'Your cart is empty' : cartMessage,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                final product = products[index];
-
-                return ListTile(
-                  title: Text(product['name']),
-                  subtitle: Text('${product['price']} EGP'),
-                  trailing: const Icon(
-                    Icons.arrow_forward_ios,
-                  ),
-                  onTap: () => openDetails(product),
-                );
-              },
+            Expanded(
+              child: isSmallScreen
+                  ? ListView.builder(
+                      itemCount: products.length,
+                      itemBuilder: (context, index) {
+                        return buildProduct(index);
+                      },
+                    )
+                  : GridView.builder(
+                      padding: const EdgeInsets.all(12),
+                      itemCount: products.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 3,
+                          ),
+                      itemBuilder: (context, index) {
+                        return buildProduct(index);
+                      },
+                    ),
             ),
+          ],
+        ),
+      );
+    }
+
+    Widget buildProduct(int index) {
+      final product = products[index];
+      final isFavorite = favoriteProducts.contains(index);
+
+      return Card(
+        child: ListTile(
+          title: Text(product['name']),
+          subtitle: Text('${product['price']} EGP'),
+          onTap: () => openDetails(product),
+          trailing: IconButton(
+            icon: Icon(
+              isFavorite ? Icons.favorite : Icons.favorite_border,
+              color: isFavorite ? Colors.red : Colors.grey,
+            ),
+            onPressed: () {
+              setState(() {
+                if (isFavorite) {
+                  favoriteProducts.remove(index);
+                  favorites--;
+                } else {
+                  favoriteProducts.add(index);
+                  favorites++;
+                }
+              });
+            },
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      );
+    }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -48,46 +49,53 @@ class _LoginPageState extends State<LoginPage> {
         elevation: 0,
       ),
       body: Center(
-         child: Padding(
-           padding: const EdgeInsets.all(24.0),
-            child: Column(
-             mainAxisSize: MainAxisSize.min,
-             children: [
-               const Icon(
-                 Icons.person,
-                 size: 80,
-                 color: Colors.blue,
-                ),
-                const SizedBox(height: 20),
-
-               const Text(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.person,
+                size: 80,
+                color: Colors.blue,
+              ),
+              const SizedBox(height: 20),
+              const Text(
                 'Welcome!',
-                 style: TextStyle(
-                   fontSize: 28,
-                   fontWeight: FontWeight.bold,
-                 ),
-               ),
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 30),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    context.goNamed(
+                      'products',
+                      queryParameters: {
+                        'user': 'Guest',
+                      },
+                    );
 
-               const SizedBox(height: 30),
+                    /*
+                    OLD NAVIGATOR CODE:
 
-               SizedBox(
-                 width: double.infinity,
-                 child: ElevatedButton(
-                   onPressed: () {
-                     Navigator.pushNamed(
-                       context,
-                       '/products',
-                       arguments: 'Guest',
-                     );
-                   },
-                   child: const Text('Login'),
-                 ),
-               ),
-             ],
-           ),
-         ),
-       ),
-     );
-   }
- }
-
+                    Navigator.pushNamed(
+                      context,
+                      '/products',
+                      arguments: 'Guest',
+                    );
+                    */
+                  },
+                  child: const Text('Login'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

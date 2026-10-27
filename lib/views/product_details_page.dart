@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   final String name;
@@ -66,13 +67,20 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               style: const TextStyle(fontSize: 20),
             ),
             const SizedBox(height: 24),
-
             ElevatedButton(
               onPressed: () {
+                context.pop<String>(
+                  '${widget.name} added to cart',
+                );
+
+                /*
+                OLD NAVIGATOR CODE:
+
                 Navigator.pop(
                   context,
                   '${widget.name} added to cart',
                 );
+                */
               },
               child: const Text('Add to Cart'),
             ),

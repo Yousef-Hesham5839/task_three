@@ -47,9 +47,47 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: SizedBox(
-        child: Text("Welcome to Login Page"),
-      ),
-    );
-  }
-}
+      body: Center(
+         child: Padding(
+           padding: const EdgeInsets.all(24.0),
+            child: Column(
+             mainAxisSize: MainAxisSize.min,
+             children: [
+               const Icon(
+                 Icons.person,
+                 size: 80,
+                 color: Colors.blue,
+                ),
+                const SizedBox(height: 20),
+
+               const Text(
+                'Welcome!',
+                 style: TextStyle(
+                   fontSize: 28,
+                   fontWeight: FontWeight.bold,
+                 ),
+               ),
+
+               const SizedBox(height: 30),
+
+               SizedBox(
+                 width: double.infinity,
+                 child: ElevatedButton(
+                   onPressed: () {
+                     Navigator.pushNamed(
+                       context,
+                       '/products',
+                       arguments: 'Guest',
+                     );
+                   },
+                   child: const Text('Login'),
+                 ),
+               ),
+             ],
+           ),
+         ),
+       ),
+     );
+   }
+ }
+

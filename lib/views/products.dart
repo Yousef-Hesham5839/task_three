@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:task_three/views/product_details_page.dart';
 import 'package:go_router/go_router.dart';
 
 class ProductsPage extends StatefulWidget {

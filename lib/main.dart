@@ -33,6 +33,44 @@ d) Which methods run when you resize the browser window, and why?
 */
 
 
+
+/*
+Part 4 – Short Answers
+
+1. What is the difference between context.go and context.push?
+   - context.go navigates to a new location and replaces the
+     current navigation route configuration.
+     Example: context.goNamed('products',
+     queryParameters: {'user': 'Guest'});
+
+   - context.push adds a new page on top of the current page
+     and allows returning a result.
+     Example: context.push<String>('/details/Laptop/25000.0');
+
+2. Why did we use go for Login -> Products and push for
+   Products -> Details?
+   - We used go for Login -> Products because Login should
+     not remain as a page to return to using the Back button.
+   - We used push for Products -> Details because we want
+     to return to Products and receive the result from the
+     Details page when the user taps "Add to Cart".
+
+3. What is the difference between a path parameter and a
+   query parameter? Show one URL from your app for each.
+   - A path parameter is part of the URL path and identifies
+     a specific resource or item.
+     Example: /details/Laptop/25000.0
+     Here, "Laptop" is the name and "25000.0" is the price.
+
+   - A query parameter comes after ? in the URL and is
+     commonly used to pass optional information or filters.
+     Example: /products?user=Guest
+     Here, "user" is the query parameter and "Guest" is
+     its value.
+*/
+
+
+
 import 'package:flutter/material.dart';
 import 'package:task_three/routers/routers.dart';
 

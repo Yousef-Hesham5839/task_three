@@ -37,7 +37,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "LoginPage",
+          "ProuctDetailsPage",
           style: TextStyle(
             fontSize: 22,
           ),
